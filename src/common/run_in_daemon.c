@@ -113,6 +113,12 @@ extern bool running_in_slurmctld_reset(void)
 	return _running_in_slurmctld(true);
 }
 
+extern bool running_in_slurmctld_slurmd(void)
+{
+	static bool run = false, set = false;
+	return run_in_daemon(&run, &set, "slurmctld,slurmd");
+}
+
 extern bool running_in_slurmd(void)
 {
 	static bool run = false, set = false;
