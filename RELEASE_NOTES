@@ -61,6 +61,9 @@ HIGHLIGHTS
     step(s). Previously, the allocation and step were combined when possible.
  -- cons_tres - change definition of the "least loaded node" (LLN) to the
     node with the greatest ratio of available cpus to total cpus.
+ -- Add support to update all the nodes in the local cluster when the nodelist
+    expression in the update node message is "ALL" (i.e. 'scontrol update
+    NodeName=ALL').
 
 CONFIGURATION FILE CHANGES (see man appropriate man page for details)
 =====================================================================

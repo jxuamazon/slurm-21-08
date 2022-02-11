@@ -1374,7 +1374,15 @@ int update_node ( update_node_msg_t * update_node_msg )
 		return ESLURM_INVALID_NODE_NAME;
 	}
 
-	host_list = hostlist_create(update_node_msg->node_names);
+	if (!xstrcasecmp(update_node_msg->node_names, "ALL")) {
+		host_list = hostlist_create(NULL);
+		for (int i = 0; i < node_record_count; i++)
+			hostlist_push_host(host_list,
+					   node_record_table_ptr[i].name);
+	} else {
+		host_list = hostlist_create(update_node_msg->node_names);
+	}
+
 	if (host_list == NULL) {
 		info("update_node: hostlist_create error on %s: %m",
 		      update_node_msg->node_names);

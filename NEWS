@@ -173,6 +173,9 @@ documents those changes that are of interest to users and administrators.
  -- cons_tres - change definition of the "least loaded node" (LLN) to the
     node with the greatest ratio of available cpus to total cpus.
  -- Disallow slurm.conf node configurations with NodeName=ALL.
+ -- Add support to update all the nodes in the local cluster when the nodelist
+    expression in the update node message is "ALL" (i.e. 'scontrol update
+    NodeName=ALL').
 
 * Changes in Slurm 21.08.7
 ==========================
