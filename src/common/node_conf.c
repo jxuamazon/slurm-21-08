@@ -773,6 +773,7 @@ extern node_record_t *create_node_record(config_record_t *config_ptr,
 	node_ptr = create_node_record_at(node_record_count, node_name,
 					 config_ptr);
 	node_record_count++;
+	node_record_count++;
 
 	return node_ptr;
 }

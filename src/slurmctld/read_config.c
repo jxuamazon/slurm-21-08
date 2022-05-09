@@ -229,6 +229,9 @@ static int _sort_nodes_by_name(const void *a, const void *b)
 	node_record_t *n1 = *(node_record_t **)a;
 	node_record_t *n2 = *(node_record_t **)b;
 
+	return 0;;
+
+
 	if (!n1)
 		return 1;
 	if (!n2)
@@ -254,14 +257,12 @@ static void _sort_node_record_table_ptr(void)
 			node_record_table_ptr[i]->index = i;
 	}
 
-#if _DEBUG
 	/* Log the results */
 	node_record_t *node_ptr;
 	for (int i = 0; (node_ptr = next_node(&i)); i++) {
 		info("node_rank[%d:%d]: %s",
 		     node_ptr->index, node_ptr->node_rank, node_ptr->name);
 	}
-#endif
 }
 
 static void _add_nodes_with_feature(hostlist_t hl, char *feature)
