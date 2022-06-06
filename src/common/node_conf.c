@@ -1399,7 +1399,6 @@ extern bitstr_t *node_conf_get_active_bitmap(void)
 
 extern void node_conf_set_all_active_bits(bitstr_t *b)
 {
-	node_record_t *node_ptr;
-	for (int i = 0; (node_ptr = next_node(&i)); i++)
+	for (int i = 0; next_node(&i); i++)
 		bit_set(b, i);
 }
