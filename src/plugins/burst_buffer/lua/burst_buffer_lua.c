@@ -171,6 +171,7 @@ typedef struct {
 	uint32_t job_id;
 	char *job_script;
 	uint32_t uid;
+	uint32_t gid;
 } stage_out_args_t;
 
 typedef struct {
@@ -954,6 +955,13 @@ static void *_start_stage_out(void *x)
 
 	if (rc == SLURM_SUCCESS) {
 		xfree(resp_msg);
+		argc = 4;
+                argv = xcalloc(argc + 1, sizeof (char *)); /* NULL-terminated */
+                argv[0] = xstrdup_printf("%u", stage_out_args->job_id);
+                argv[1] = xstrdup_printf("%u", stage_out_args->uid);
+                argv[2] = xstrdup_printf("%u", stage_out_args->gid);
+                argv[3] = xstrdup_printf("%s", stage_out_args->job_script);
+
 		timeout = bb_state.bb_config.stage_out_timeout;
 		op = "slurm_bb_data_out";
 		START_TIMER;
@@ -1037,6 +1045,7 @@ static void _queue_stage_out(job_record_t *job_ptr, bb_job_t *bb_job)
 	stage_out_args = xmalloc(sizeof *stage_out_args);
 	stage_out_args->job_id = bb_job->job_id;
 	stage_out_args->uid = bb_job->user_id;
+	stage_out_args->gid = bb_job->group_id;
 	stage_out_args->job_script = bb_handle_job_script(job_ptr, bb_job);
 
 	slurm_thread_create_detached(&tid, _start_stage_out, stage_out_args);
@@ -1348,6 +1357,7 @@ static bb_job_t *_get_bb_job(job_record_t *job_ptr)
 		bb_state_num(job_ptr->burst_buffer_state) : BB_STATE_PENDING;
 	bb_set_job_bb_state(job_ptr, bb_job, new_bb_state);
 	bb_job->user_id = job_ptr->user_id;
+	bb_job->group_id = job_ptr->group_id;
 	bb_specs = xstrdup(job_ptr->burst_buffer);
 
 	tok = strtok_r(bb_specs, "\n", &save_ptr);
@@ -2494,10 +2504,13 @@ static void *_start_stage_in(void *x)
 	if (rc == SLURM_SUCCESS) {
 		xfree(resp_msg);
 		free_command_argv(argv);
-		argc = 2;
+		argc = 4;
 		argv = xcalloc(argc + 1, sizeof (char *)); /* NULL-terminated */
 		argv[0] = xstrdup_printf("%u", stage_in_args->job_id);
-		argv[1] = xstrdup_printf("%s", stage_in_args->job_script);
+		argv[1] = xstrdup_printf("%u", stage_in_args->uid);
+                argv[2] = xstrdup_printf("%u", stage_in_args->gid);
+                argv[3] = xstrdup_printf("%s", stage_in_args->job_script);
+
 
 		timeout = bb_state.bb_config.stage_in_timeout;
 		op = "slurm_bb_data_in";

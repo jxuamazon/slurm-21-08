@@ -176,6 +176,7 @@ typedef struct bb_job {
 	bool       use_job_buf;	/* True if uses job buffer,
 				 * false if uses persistent buffer only */
 	uint32_t   user_id;	/* user the job runs as */
+	uint32_t   group_id;	/* usergroup the job runs as */
 } bb_job_t;
 
 /* Used for building queue of jobs records for various purposes */
